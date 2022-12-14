@@ -13,7 +13,7 @@ provider "aws" {
   region = "us-east-2"
 }
 
-resource "aws_instance" "example" {
+resource "aws_launch_configuration" "example" {
   ami                    = "ami-0fb653ca2d3203ac1"
   instance_type          = "t2.micro"
   vpc_security_group_ids = [aws_security_group.instance.id]
@@ -31,6 +31,18 @@ resource "aws_instance" "example" {
   }
 }
 
+resource "aws_autoscaling_group" "example {
+  launch_configuration = aws_launch_configutation.example.name
+  min_size = 2
+  max_size = 10
+  
+  tag {
+    key                 = "Name"
+    value               = "terraform-asg-example"
+    propagate_at_launch = true
+  }
+  }
+}"
 resource "aws_security_group" "instance" {
 
   name = var.security_group_name
@@ -42,6 +54,9 @@ resource "aws_security_group" "instance" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+
+
+
 
 variable "security_group_name" {
   description = "The name of the security group"
